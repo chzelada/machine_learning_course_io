@@ -63,8 +63,25 @@ donde,
 
 ![](loocv.png)
 
+**Validation error**
+
+$$J_{cv}=\frac{1}{n}\sum_{i=1}^n MSE_i$$
+
+* $n$ Numero total de observaciones
+* $MSE_i$ suma de los errores al cuadrado del $i$-esimo LOOCV 
+
 
 ### K-folds Cross Validation
 
 ![](kfcv.gif)
+
+**Validation error**
+
+$$J_{cv}=\frac{1}{k}\sum_{i=1}^k MSE_i$$
+
+* $k$ Numero total de folds
+* $MSE_i$ suma de los errores al cuadrado del $i$-esimo k-fold
+
+
+
 
