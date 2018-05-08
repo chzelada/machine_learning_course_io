@@ -1,3 +1,4 @@
+library(caret)
 ## Dummy Variables
 
 library(earth)
@@ -37,10 +38,9 @@ clean_mdrrDescr <- clean_mdrrDescr[,-highlyCorDescr]
 set.seed(96)
 inTrain <- sample(seq(along = mdrrClass), length(mdrrClass)/2)
 
-training <- filteredDescr[inTrain,]
-test <- filteredDescr[-inTrain,]
-trainMDRR <- mdrrClass[inTrain]
-testMDRR <- mdrrClass[-inTrain]
+training <- clean_mdrrDescr[inTrain,]
+test <- clean_mdrrDescr[-inTrain,]
+
 
 preProcValues <- preProcess(training, method = c("center", "scale"))
 
