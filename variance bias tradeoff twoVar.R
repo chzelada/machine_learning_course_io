@@ -21,7 +21,7 @@ cv<-function(){
   return(sse_vec_mean)
 }
 
-debug(cv)
+undebug(cv)
 cv()
 
 data<-cv()
@@ -32,4 +32,4 @@ colMeans(data)
 
 fit_lm<-lm(mpg~poly(disp,2)+poly(wt,2), data=mtcars_data )
 summary(fit_lm)
-plot(mtcars)
+
