@@ -1,0 +1,154 @@
+---
+title: "Visualizations With Caret"
+output: html_notebook
+---
+
+
+```{r}
+library(caret)
+library(dplyr)
+library(AppliedPredictiveModeling)  ## Book
+library(ellipse)
+library(mlbench) #Machine Learning Benchmark Problems
+```
+
+# Regresion
+
+```{r}
+data(BostonHousing)
+regVar <- c("age", "lstat", "tax")
+str(BostonHousing[, regVar])
+```
+
+
+```{r}
+featurePlot(x = BostonHousing[, regVar], 
+            y = BostonHousing$medv, 
+            plot = "scatter", 
+            layout = c(3, 1))
+```
+
+```{r}
+featurePlot(x = BostonHousing[, regVar], 
+            y = BostonHousing$medv, 
+            plot = "scatter",
+            type = c("p", "smooth"),
+            span = .5,
+            layout = c(3, 1))
+```
+
+
+```{r}
+theme1 <- trellis.par.get()
+theme1$plot.symbol$col = rgb(.2, .2, .2, .4)
+theme1$plot.symbol$pch = 16
+theme1$plot.line$col = rgb(1, 0, 0, .7)
+theme1$plot.line$lwd <- 2
+trellis.par.set(theme1)
+featurePlot(x = BostonHousing[, regVar], 
+            y = BostonHousing$medv, 
+            plot = "scatter",
+            type = c("p", "smooth"),
+            span = .5,
+            layout = c(3, 1))
+```
+
+
+
+#Clasificacion
+
+```{r}
+str(iris)
+```
+
+## Lattice Package Wrapper
+
+* https://www.datacamp.com/courses/data-visualization-in-r-with-lattice
+* http://lattice.r-forge.r-project.org/documentation.php
+* http://lattice.r-forge.r-project.org/Vignettes/src/lattice-intro/lattice-intro.pdf
+
+
+
+```{r,warning=FALSE}
+featurePlot(x = iris %>% select(-Species), 
+            y = iris$Species, 
+            plot = "pairs")
+```
+
+
+```{r,warning=FALSE}
+bookTheme(set = TRUE)
+featurePlot(x = iris %>% select(-Species), 
+            y = iris$Species, 
+            plot = "pairs",
+            ## Agrega informacion de los puntos
+            auto.key = list(columns = 3))
+```
+
+```{r}
+transparentTheme(set = TRUE, trans = 0.3, pchSize = 1.1)
+featurePlot(x = iris %>% select(-Species), 
+            y = iris$Species, 
+            plot = "pairs",
+            auto.key = list(columns = 3))
+```
+
+```{r,warning=FALSE}
+bookTheme(set = TRUE)
+featurePlot(x = iris %>% select(-Species), 
+            y = iris$Species, 
+            plot = "ellipse")
+```
+
+
+```{r}
+transparentTheme(trans = .9)
+featurePlot(x = iris[, 1:4], 
+            y = iris$Species,
+            plot = "density", 
+            auto.key = list(columns = 3))
+```
+
+
+```{r}
+transparentTheme(trans = .9)
+featurePlot(x = iris[, 1:4], 
+            y = iris$Species,
+            plot = "density", 
+            scales = list(x = list(relation="free"), 
+                          y = list(relation="free")),
+            auto.key = list(columns = 3))
+```
+
+```{r}
+transparentTheme(trans = .9)
+featurePlot(x = iris[, 1:4], 
+            y = iris$Species,
+            plot = "density", 
+            scales = list(x = list(relation="free"), 
+                          y = list(relation="free")),
+             adjust = 1.5,
+            pch = "|", 
+            layout = c(4, 1),
+            auto.key = list(columns = 3))
+```
+
+
+
+```{r}
+featurePlot(x = iris[, 1:4], 
+            y = iris$Species, 
+            plot = "box")
+```
+
+```{r}
+featurePlot(x = iris[, 1:4], 
+            y = iris$Species, 
+            plot = "box", 
+            ## Pass in options to bwplot() 
+            scales = list(y = list(relation="free"),
+                          x = list(rot = 90)),  
+            layout = c(4,1 ), 
+            auto.key = list(columns = 2))
+```
+
