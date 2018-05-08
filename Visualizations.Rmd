@@ -7,7 +7,7 @@ output: html_notebook
 ```{r}
 library(caret)
 library(dplyr)
-library(AppliedPredictiveModeling)  ## Book
+library(AppliedPredictiveModeling)  ## Book about caret
 library(ellipse)
 library(mlbench) #Machine Learning Benchmark Problems
 ```
