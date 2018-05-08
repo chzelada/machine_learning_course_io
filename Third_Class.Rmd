@@ -82,6 +82,13 @@ $$J_{cv}=\frac{1}{k}\sum_{i=1}^k MSE_i$$
 * $k$ Numero total de folds
 * $MSE_i$ suma de los errores al cuadrado del $i$-esimo k-fold
 
+## Learning Curves
+
+![](lc.png)
+
+
+
+
 
 
 
