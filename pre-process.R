@@ -9,14 +9,13 @@ new_data <- predict(dummies, newdata = etitanic)
 
 
 ## zero or near-zero variance
-
 data(mdrr)
 table(mdrrDescr$nR11)
 nzv <- nearZeroVar(mdrrDescr, saveMetrics= TRUE)
 sum(nzv$zeroVar)
 sum(nzv$nzv)
 nzv$freqRatio
-nzv[!nzv$nzv,][1:10,]
+nzv[nzv$nzv,][1:10,]
 
 nzv <- nearZeroVar(mdrrDescr)
 clean_mdrrDescr <- mdrrDescr[,-nzv]

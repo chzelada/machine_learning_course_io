@@ -70,7 +70,7 @@ str(iris)
 
 
 ```{r,warning=FALSE}
-featurePlot(x = iris %>% select(-Species), 
+featurePlot(x = iris %>% dplyr::select(-Species), 
             y = iris$Species, 
             plot = "pairs")
 ```
@@ -78,7 +78,7 @@ featurePlot(x = iris %>% select(-Species),
 
 ```{r,warning=FALSE}
 bookTheme(set = TRUE)
-featurePlot(x = iris %>% select(-Species), 
+featurePlot(x = iris %>% dplyr::select(-Species), 
             y = iris$Species, 
             plot = "pairs",
             ## Agrega informacion de los puntos
@@ -87,7 +87,7 @@ featurePlot(x = iris %>% select(-Species),
 
 ```{r}
 transparentTheme(set = TRUE, trans = 0.3, pchSize = 1.1)
-featurePlot(x = iris %>% select(-Species), 
+featurePlot(x = iris %>% dplyr::select(-Species), 
             y = iris$Species, 
             plot = "pairs",
             auto.key = list(columns = 3))
@@ -95,7 +95,7 @@ featurePlot(x = iris %>% select(-Species),
 
 ```{r,warning=FALSE}
 bookTheme(set = TRUE)
-featurePlot(x = iris %>% select(-Species), 
+featurePlot(x = iris %>% dplyr::select(-Species), 
             y = iris$Species, 
             plot = "ellipse")
 ```

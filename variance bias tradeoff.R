@@ -27,10 +27,7 @@ for(i in 1:19){
   sse_vec <- c(sse_vec,sse) 
 }
 
-
-
 row.names(mtcars_data)<-NULL
-
 
 cv<-function(){
   sse_vec_mean<-c()
