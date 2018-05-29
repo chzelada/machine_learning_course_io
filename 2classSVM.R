@@ -1,16 +1,6 @@
 library(e1071)
 library(dplyr)
 
-str(iris)
-svm_model <- svm(Species~.,data = iris,kernel="sigmoid")
-print(svm_model)
-pred <- predict(svm_model,iris)
-table(pred,iris$Species)
-
-svm_model$SV
-
-
-
 
 
 x1<-rnorm(60,4,2)

@@ -1,0 +1,177 @@
+---
+title: "Regresión Logistica"
+author: "Carlos Zelada"
+date: "3/5/2017"
+output: html_document
+---
+
+
+```{r,echo=FALSE, warning=FALSE, message=FALSE}
+library(ISLR)
+library(dplyr)
+library(ggplot2)
+```
+
+
+## Regresión Logistica
+
+### Odds
+* Sea $p$ la probabilidad de éxito
+* Sea $1-p$ la probabilidad de fracaso
+
+$$\text{odds}=\frac{p}{1-p}$$
+
+$$\begin{cases}
+0<\text{Odds}<1 \text{ (Fracazo mas probable)} & \text{ si } p<1-p \\ 
+\text{Odds}=1 \text{ (Probabilidad de Éxito y Fracazo iguales)}& \text{ si } p=1-p \\ 
+\text{Odds}>1 \text{ (Éxito mas probable)}& \text{ si } p>1-p 
+\end{cases}$$
+
+```{r,echo=FALSE}
+p<-seq(0,1,by=0.01)
+plot(p,p/(1-p),type = "l")
+
+```
+
+Notar que $Odds \in (0,\infty)$ lo usaremos asi $\ln(Odds) \in (-\infty,\infty)$
+
+
+```{r,echo=FALSE}
+plot(p,log(p/(1-p)),type = "l")
+```
+
+
+## Regresión Lineal VRS Regresión Logistica
+Utilizaremos como ejemplo el dataset `Default`
+```{r}
+names(Default)
+```
+
+```{r}
+summary(Default)
+```
+
+
+
+
+
+```{r}
+Default$coded_default <- ifelse(Default$default=="Yes",1,0)
+Default %>% ggplot(aes(x=balance,y=coded_default))+
+  geom_point(aes(col=Default$default))+
+  geom_smooth(method = "lm")
+```
+
+```{r}
+reg_fit <- lm(coded_default~balance,data = Default)
+summary(reg_fit)$coefficients
+```
+
+```{r}
+coef(reg_fit)
+```
+
+
+
+## Formulación de la regresión logistica
+
+$$P(\text{default}=Yes | \text{ balance})$$
+
+$$P(\text{default}=Yes | \text{ balance})=\beta_0+\beta_1\text{ balance}$$
+
+
+$$P(X)=\beta_0+\beta_1\text{ X }$$
+
+$$\begin{align*}
+P(X)&=\beta_0+\beta_1X \ \\ 
+ \ln{\frac{p}{1-p}}&=\beta_0+\beta_1X  \\ 
+\frac{p}{1-p} &=e^{\beta_0+\beta_1X} \\
+p &=e^{\beta_0+\beta_1X}(1-p) \\
+p &=e^{\beta_0+\beta_1X}-pe^{\beta_0+\beta_1X} \\
+p+pe^{\beta_0+\beta_1X} &=e^{\beta_0+\beta_1X} \\
+p(1+e^{\beta_0+\beta_1X} )&=e^{\beta_0+\beta_1X} \\
+p&=\frac{ e^{\beta_0+\beta_1X} }{1+e^{\beta_0+\beta_1X} } 
+\end{align*}$$
+
+
+```{r}
+logit_reg <- glm(default~balance,data = Default,family = "binomial")
+summary(logit_reg)$coefficients
+```
+
+```{r}
+coef(logit_reg)
+```
+
+entonces esto lo podemos interpretar de la siguiente forma,
+$$\ln{\text{Odds}}=\beta_0+\beta_1 \text{ balance}$$
+donde $\beta_0=$ `r coef(logit_reg)[1]` y $\beta_1=$ `r coef(logit_reg)[2]`. 
+
+```{r,echo=FALSE}
+beta0<-coef(logit_reg)[1]
+beta1<-coef(logit_reg)[2]
+beta0<-round(beta0,4)
+beta1<-round(beta1,4)
+```
+
+
+$$
+\begin{align*}
+\ln{\text{Odds}}&=`r beta0`+`r beta1` \text{ balance} \\ 
+\text{Odds}&=e^{`r beta0`+`r beta1` \text{ balance}} \\
+p &= \frac{e^{`r beta0`+`r beta1` \text{ balance}}}{1+e^{`r beta0`+`r beta1` \text{ balance}}}
+\end{align*}
+$$
+
+```{r}
+p<-exp(beta0+beta1*Default$balance)/(1+exp(beta0+beta1*Default$balance) )
+plot(Default$balance,p)
+```
+
+```{r}
+prob_default <- function(balance,beta0,beta1){
+  p<-exp(beta0+beta1*balance)/(1+exp(beta0+beta1*balance) )
+  return(as.numeric(p))
+}
+
+prob_default(1900,beta0,beta1)
+```
+
+```{r}
+new_balance <- seq(500,3000,by=150)
+data.frame(default=new_balance,
+           prob=round(sapply(new_balance,
+                             "prob_default",
+                             beta0=beta0,
+                             beta1=beta1), 
+                      4)
+           )
+```
+
+## Interpretación de los coeficientes
+
+```{r}
+summary(logit_reg)$coefficients
+```
+
+```{r}
+round(exp(cbind(coef=coef(logit_reg), confint(logit_reg)  )),6)
+```
+
+
+```{r}
+logit_reg2 <- glm(default~scale(balance),data = Default,family = "binomial")
+round(exp(cbind(coef=coef(logit_reg2), confint(logit_reg2)  )),6)
+```
+
+```{r}
+summary(logit_reg2)$coefficients
+```
+
+```{r}
+logit_reg3 <- glm(default~ scale(balance) + student, data = Default , family = "binomial") 
+summary(logit_reg3)$coefficients %>% round(10)
+```
+
+
+
